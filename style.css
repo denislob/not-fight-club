@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #23062b;
+    color: #f1eded;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background-color: #23062b;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 800px;
+    min-height: 600px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #999698;
+}
+
+p {
+    text-align: center; 
+    margin-bottom: 30px;
+}
+
+.screen {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #121618;
+    border-radius: 8px;
+    background-color: #158677;
+    color: white;
+    font-size: 16px;
+}
+
+
+button {
+    background-color: #158677;
+    color: #1a1a2e;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+    display: block;
+    margin: 20px auto;
+    width: 200px;
+}
+
+button:hover {
+    background-color: #185741;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background-color: #a7a2a2;
+    cursor: not-allowed;
+    transform: none;
+}
+
+input[placeholder="Enter your name"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: rgb(224, 204, 204);
+    opacity: 1; 
+}    

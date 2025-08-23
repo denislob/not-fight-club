@@ -27,6 +27,8 @@ body {
     overflow: hidden;
 }
 
+/* Registration screen */
+
 h1, h2, h3 {
     text-align: center;
     margin-bottom: 20px;
@@ -102,4 +104,104 @@ button:disabled {
 input[placeholder="Enter your name"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: rgb(224, 204, 204);
     opacity: 1; 
-}    
+} 
+
+/* Home screen */
+
+.screensaver {
+    text-align: center; 
+    margin: 40px 0;
+    font-size: 100px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.nav-btn {
+    background-color: #063461;
+    color: #e6e6e6;
+    width: auto;
+}
+
+/* Player screen */
+
+.avatar-selection {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.avatar-option {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    overflow: hidden;
+    background-color: #063461;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+
+.avatar-option.selected {
+    border-color: #158677;
+    box-shadow: 0 0 15px #158677;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 0;
+    text-align: center;
+}
+
+.stat {
+    background-color: #180747;
+    padding: 15px;
+    border-radius: 10px;
+    width: 150px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;    
+}
+
+.wins {
+    color: #1c8d2b; 
+}
+
+.losses {
+    color: #a51d33; 
+}
+
+.draws {
+    color: #caa40ad3; 
+}
+
+.fighter {
+    text-align: center;
+    width: 45%;
+}
+
+.fighter-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    overflow: hidden;
+    border: 3px solid #435015;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    background-color: #121314;
+}

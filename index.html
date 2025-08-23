@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <!-- Registration screen -->
-        <div id="registration-screen" class="screen active">
+        <div id="registration-screen" class="screen">
             <h1>Not Fight Club</h1>
             <p>Enter your name to start the game</p>
             
@@ -19,6 +19,64 @@
             </div>
             
             <button id="register-btn">Start game</button>
+        </div>
+        <!-- Home screen -->
+        <div id="home-screen" class="screen">
+            <h1>Welcome, <span id="player-name-display"></span>!</h1>
+            
+            <div class="screensaver">
+                <div>🛡️</div>
+            </div>
+            
+            <button id="start-battle-btn">Start a new fight</button>
+            
+            <div class="navigation">
+                <button class="nav-btn" data-screen="character-screen">Character</button>
+                <button class="nav-btn" data-screen="settings-screen">Settings</button>
+            </div>
+        </div>
+        <!-- Player screen -->
+        <div id="character-screen" class="screen active">
+            <h1>Your character</h1>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div class="fighter-avatar" id="current-avatar">
+                    <img src="assets/images/knight.png">
+                </div>
+                <h2 id="character-name"></h2>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div>Wins</div>
+                    <div class="stat-value wins" id="wins-count">0</div>
+                </div>
+                <div class="stat">
+                    <div>Lose</div>
+                    <div class="stat-value losses" id="losses-count">0</div>
+                </div>
+                <div class="stat">
+                    <div>Draw</div>
+                    <div class="stat-value draws" id="draws-count">0</div>
+                </div>
+            </div>
+            
+            <h3>Select an avatar:</h3>
+            <div class="avatar-selection">
+                <div class="avatar-option" data-avatar="1">
+                    <img src="assets/images/knight.png">
+                </div>
+                <div class="avatar-option" data-avatar="2">
+                    <img src="assets/images/robot.png">
+                </div>
+                <div class="avatar-option" data-avatar="3">
+                    <img src="assets/images/ridingHabit.png">
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" data-screen="home-screen">Home</button>
+            </div>
         </div>
     </div>
     

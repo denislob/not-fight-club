@@ -36,7 +36,7 @@
             </div>
         </div>
         <!-- Player screen -->
-        <div id="character-screen" class="screen active">
+        <div id="character-screen" class="screen">
             <h1>Your character</h1>
             
             <div style="text-align: center; margin: 20px 0;">
@@ -72,6 +72,114 @@
                 <div class="avatar-option" data-avatar="3">
                     <img src="assets/images/ridingHabit.png">
                 </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" data-screen="home-screen">Home</button>
+            </div>
+        </div>
+        <!-- Settings screen -->
+        <div id="settings-screen" class="screen">
+            <h1>Settings</h1>
+            
+            <div class="form-group">
+                <label for="new-player-name">Change player name:</label>
+                <input type="text" id="new-player-name" placeholder="Enter a new name">
+            </div>
+            
+            <button id="save-settings-btn">Save changes</button>
+            
+            <div class="navigation">
+                <button class="nav-btn" data-screen="home-screen">Home</button>
+            </div>
+        </div>
+        <!-- Enemy select screen -->
+        <div id="enemy-select-screen" class="screen">
+            <h1>Select your opponent</h1>
+            
+            <div class="enemy-selection">
+                <div class="enemy-option" data-enemy="goblin">
+                    <div class="enemy-avatar">
+                        <img src="assets/images/goblin.png">
+                    </div>
+                    <div>Goblin</div>
+                    <div>Attack: 1, Defense: 2</div>
+                </div>
+                <div class="enemy-option" data-enemy="spider">
+                    <div class="enemy-avatar">
+                        <img src="assets/images/spider.png">
+                    </div>
+                    <div>Spider Monster</div>
+                    <div>Attack: 2, Defense: 1</div>
+                </div>
+                <div class="enemy-option" data-enemy="troll">
+                    <div class="enemy-avatar">
+                        <img src="assets/images/troll.png">
+                    </div>
+                    <div>Troll</div>
+                    <div>Attack: 1, Defense: 3</div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" data-screen="home-screen">Home</button>
+            </div>
+        </div>
+        <!-- Battle screen -->
+        <div id="battle-screen" class="screen active">
+            <h1>Battle with <span id="enemy-name">Enemy</span></h1>
+            
+            <div class="battle-container">
+                <div class="fighter">
+                    <div class="fighter-avatar" id="player-avatar-battle">
+                        <img src="assets/images/knight.png">
+                    </div>
+                    <h3 id="player-name-battle"></h3>
+                    <div class="health-bar">
+                        <div id="player-health-bar" class="health-fill" style="width: 100%;"></div>
+                    </div>
+                    <div>Health: <span id="player-health">100</span>/<span id="player-max-health">100</span></div>
+                </div>
+                
+                <div class="fighter">
+                    <div class="fighter-avatar" id="enemy-avatar-battle">
+                        <img src="assets/images/goblin.png">
+                    </div>
+                    <h3 id="enemy-name-battle"></h3>
+                    <div class="health-bar">
+                        <div id="enemy-health-bar" class="health-fill" style="width: 100%;"></div>
+                    </div>
+                    <div id="enemy-health-line">Health: <span id="enemy-health">100</span>/<span id="enemy-max-health">100</span></div>
+                </div>
+            </div>
+            
+            <div class="attack-zone">
+                <div class="zone-title">Attack Zone (select one body part):</div>
+                <div class="body-zones">
+                    <div class="body-zone" data-part="head">Head</div>
+                    <div class="body-zone" data-part="hands">Hands</div>
+                    <div class="body-zone" data-part="legs">Legs</div>
+                    <div class="body-zone" data-part="stomach">Stomach</div>
+                    <div class="body-zone" data-part="chest">Chest</div>
+                </div>
+            </div>
+            
+            <div class="defense-zone">
+                <div class="zone-title">Defense Zone (select two body parts):</div>
+                <div class="body-zones">
+                    <div class="body-zone" data-part="head">Head</div>
+                    <div class="body-zone" data-part="hands">Hands</div>
+                    <div class="body-zone" data-part="legs">Legs</div>
+                    <div class="body-zone" data-part="stomach">Stomach</div>
+                    <div class="body-zone" data-part="chest">Chest</div>
+                </div>
+            </div>
+            
+            <button id="attack-btn" disabled>Attack!</button>
+            
+            <div class="battle-log">
+                <h3>Battle log:</h3>
+                <div id="log-entries"></div>
             </div>
             
             <div class="navigation">

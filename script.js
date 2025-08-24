@@ -164,9 +164,29 @@ function setupEventListeners() {
     document.getElementById('start-battle-btn').addEventListener('click', function() {
         showScene('enemy-select-screen');
     });
-    
 
-    
+    document.querySelectorAll('.enemy-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const enemyType = this.getAttribute('data-enemy');
+            startFight(enemyType);
+        });
+    });
+
+    document.getElementById('enemy-select-screen').addEventListener('show', function() {
+        document.querySelectorAll('.enemy-option').forEach(option => {
+            const enemyType = option.getAttribute('data-enemy');
+            option.innerHTML = `<img src="${enemies[enemyType].avatar}" alt="${enemies[enemyType].name}" class="enemy-option-image">
+                               <div>${enemies[enemyType].name}</div>`;
+        });
+    });
+
+    document.querySelectorAll('.body-zone').forEach(zone => {
+        zone.addEventListener('click', function() {
+            selectBodyZone(this);
+        });
+    }); 
+
+    document.getElementById('attack-btn').addEventListener('click', executeAttack);    
     
 }
 
@@ -184,9 +204,7 @@ function registerPlayer() {
         saveGame();
         updatePlayer();
         showScene('home-screen');
-    } else {
-        showAlert('Please enter your name!');
-    }
+    } 
 }
 
 function updatePlayer() {
@@ -211,7 +229,8 @@ function saveSettings() {
     if (newName) {
         player.name = newName;
         saveGame();
-        updatePlayer();        
+        updatePlayer();
+                
     } 
 }
 
@@ -236,13 +255,149 @@ function executeAttack() {
     saveGame();
 }
 
+function commitEnemyActions() {
+   
+    battleState.enemyAttack = [];
+    for (let i = 0; i < enemy.attackZones; i++) {
+        let availableParts = bodyZones.filter(part => !battleState.enemyAttack.includes(part));
+        if (availableParts.length > 0) {
+            const randomIndex = Math.floor(Math.random() * availableParts.length);
+            battleState.enemyAttack.push(availableParts[randomIndex]);
+        }
+    }
+    
+   
+    battleState.enemyDefense = [];
+    for (let i = 0; i < enemy.defenseZones; i++) {
+        let availableParts = bodyZones.filter(part => !battleState.enemyDefense.includes(part));
+        if (availableParts.length > 0) {
+            const randomIndex = Math.floor(Math.random() * availableParts.length);
+            battleState.enemyDefense.push(availableParts[randomIndex]);
+        }
+    }
+}
+
+function processCombatLogic() {
+    const damagePerHit = 10;
+    const critChance = 0.2; 
+    
+   
+    battleState.playerAttack.forEach(attackPart => {
+        const isCrit = Math.random() < critChance;
+        let damage = damagePerHit;
+        
+        if (isCrit) {
+            damage = Math.floor(damage * 1.5);
+        }
+        
+        if (battleState.enemyDefense.includes(attackPart)) {
+            
+            if (isCrit) {
+                
+                enemy.health -= damage;
+                displayLogEntry(`${player.name} delivered a CRITICAL blow to the ${attackPart.toUpperCase()} and broke through the defense, dealing ${damage} damage!`);
+            } else {
+                
+                displayLogEntry(`${player.name} attacked in the ${attackPart.toUpperCase()}, but ${enemy.name} blocked the blow.`);
+            }
+        } else {
+            
+            enemy.health -= damage;
+            if (isCrit) {
+                displayLogEntry(`${player.name} delivered a CRITICAL blow to the ${attackPart.toUpperCase()} and dealt ${damage} damage!`);
+            } else {
+                displayLogEntry(`${player.name} attacked in the ${attackPart.toUpperCase()} and caused ${damage} damage.`);
+            }
+        }
+    });
+    
+    
+    battleState.enemyAttack.forEach(attackPart => {
+        const isCrit = Math.random() < critChance;
+        let damage = damagePerHit;
+        
+        if (isCrit) {
+            damage = Math.floor(damage * 1.5);
+        }
+        
+        if (battleState.playerDefense.includes(attackPart)) {
+           
+            if (isCrit) {
+               
+                player.health -= damage;
+                displayLogEntry(`${enemy.name} delivered a CRITICAL blow to the ${attackPart.toUpperCase()} and broke through your defense, dealing ${damage} damage!`);
+            } else {
+                
+                displayLogEntry(`${enemy.name} attacked you in the ${attackPart.toUpperCase()}, but you blocked the blow.`);
+            }
+        } else {
+            
+            player.health -= damage;
+            if (isCrit) {
+                displayLogEntry(`${enemy.name} delivered a CRITICAL blow to the ${attackPart.toUpperCase()} and caused ${damage} damage!`);
+            } else {
+                displayLogEntry(`${enemy.name} attacked you in the ${attackPart.toUpperCase()} and caused ${damage} damage.`);
+            }
+        }
+    });
+    
+   
+    player.health = Math.max(0, player.health);
+    enemy.health = Math.max(0, enemy.health);
+}
+
+function displayLogEntry(message) {
+    battleState.log.push(message);
+    const logEntry = document.createElement('div');
+    logEntry.className = 'log-entry';
+    logEntry.innerHTML = stylizeKeywords(message);
+    document.getElementById('log-entries').appendChild(logEntry);
+    
+    
+    const logContainer = document.getElementById('log-entries');
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+
+function stylizeKeywords(text) {
+    const keywords = [player.name, enemy.name, 'head', 'hands', 'legs', 'stomach', 'chest', 'damage', 'critical', 'blocked'];
+    
+    keywords.forEach(keyword => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+        text = text.replace(regex, `<span class="highlight">${keyword.toUpperCase()}</span>`);
+    });
+    
+    return text;
+}
+
+function updateCombatInterface() {
+    
+    const playerHealth = Number(player.health);
+    const playerMaxHealth = Number(player.maxHealth);
+    const enemyHealth = Number(enemy.health);
+    const enemyMaxHealth = Number(enemy.maxHealth);
+    
+    
+    document.getElementById('player-health').textContent = playerHealth;
+    document.getElementById('player-max-health').textContent = playerMaxHealth;
+    document.getElementById('enemy-health').textContent = enemyHealth;
+    document.getElementById('enemy-max-health').textContent = enemyMaxHealth;
+    
+    
+    const playerHealthPercent = (playerHealth / playerMaxHealth) * 100;
+    const enemyHealthPercent = (enemyHealth / enemyMaxHealth) * 100;
+    
+    document.getElementById('player-health-bar').style.width = `${playerHealthPercent}%`;
+    document.getElementById('enemy-health-bar').style.width = `${enemyHealthPercent}%`;
+}
+
 function updateCharacterScene() {
     document.getElementById('character-name').textContent = player.name;
     document.getElementById('wins-count').textContent = player.wins;
     document.getElementById('losses-count').textContent = player.losses;
-    document.getElementById('draws-count').textContent = player.draws; // Обновляем ничьи
+    document.getElementById('draws-count').textContent = player.draws; 
     
-    // Выделяем выбранный аватар
+   
     document.querySelectorAll('.avatar-option').forEach(option => {
         const avatarId = option.getAttribute('data-avatar');
         option.innerHTML = `<img src="${avatars[avatarId]}" alt="Avatar ${avatarId}" class="avatar-option-image">`;
@@ -260,7 +415,7 @@ function selectAvatar(avatarId) {
     saveGame();
     updatePlayer();
     
-    // Обновляем выделение
+    
     document.querySelectorAll('.avatar-option').forEach(option => {
         if (option.getAttribute('data-avatar') === avatarId) {
             option.classList.add('selected');
@@ -268,4 +423,128 @@ function selectAvatar(avatarId) {
             option.classList.remove('selected');
         }
     });
+}
+
+function startFight(enemyType) {
+    enemy = {...enemies[enemyType]};
+    enemy.health = enemy.maxHealth;
+    player.health = player.maxHealth;
+    
+    battleState = {
+        playerAttack: [],
+        playerDefense: [],
+        enemyAttack: [],
+        enemyDefense: [],
+        log: []
+    };
+    
+    
+    document.getElementById('enemy-name').textContent = enemy.name;
+    document.getElementById('enemy-name-battle').textContent = enemy.name;
+    document.getElementById('enemy-avatar-battle').innerHTML = `<img src="${enemy.avatar}" alt="${enemy.name}" class="avatar-image">`;
+    
+    
+    document.getElementById('player-health').textContent = player.health;
+    document.getElementById('player-max-health').textContent = player.maxHealth;
+    document.getElementById('enemy-health').textContent = enemy.health;
+    document.getElementById('enemy-max-health').textContent = enemy.maxHealth;
+    
+    document.getElementById('player-health-bar').style.width = '100%';
+    document.getElementById('enemy-health-bar').style.width = '100%';
+    
+   
+    document.getElementById('log-entries').innerHTML = '';
+    
+    
+    resetBodyZones();
+    
+    showScene('battle-screen');
+    saveGame();
+}
+
+function selectBodyZone(element) {
+    const part = element.getAttribute('data-part');
+    const zone = element.closest('.attack-zone') ? 'attack' : 'defense';
+    
+    if (zone === 'attack') {
+        
+        if (battleState.playerAttack.includes(part)) {
+            
+            battleState.playerAttack = battleState.playerAttack.filter(p => p !== part);
+            element.classList.remove('selected');
+        } else {
+            
+            document.querySelectorAll('.attack-zone .body-zone').forEach(p => {
+                p.classList.remove('selected');
+            });
+            battleState.playerAttack = [part];
+            element.classList.add('selected');
+        }
+    } else {
+       
+        if (battleState.playerDefense.includes(part)) {
+            
+            battleState.playerDefense = battleState.playerDefense.filter(p => p !== part);
+            element.classList.remove('selected');
+        } else if (battleState.playerDefense.length < 2) {
+            
+            battleState.playerDefense.push(part);
+            element.classList.add('selected');
+        } 
+    }
+    
+   
+    updateAttackButton();
+}
+
+
+function resetBodyZones() {
+    document.querySelectorAll('.body-zone').forEach(part => {
+        part.classList.remove('selected');
+    });
+    battleState.playerAttack = [];
+    battleState.playerDefense = [];
+    updateAttackButton();
+}
+
+
+function updateAttackButton() {
+    const attackBtn = document.getElementById('attack-btn');
+    if (battleState.playerAttack.length === 1 && battleState.playerDefense.length === 2) {
+        attackBtn.disabled = false;
+    } else {
+        attackBtn.disabled = true;
+    }
+}
+
+function endFight() {
+    let resultMessage = '';
+
+    if (player.health <= 0 && enemy.health <= 0) {
+        resultMessage = 'DRAW! Both fighters are defeated.';
+        displayLogEntry(resultMessage);
+        player.draws++;
+    } else if (player.health <= 0) {
+        resultMessage = `YOU LOSE! ${enemy.name.toUpperCase()} win.`;
+        displayLogEntry(resultMessage);
+        player.losses++;
+    } else {
+        resultMessage = `YOU WIN! ${enemy.name.toUpperCase()} is defeated.`;
+        displayLogEntry(resultMessage);
+        player.wins++;
+    }
+    
+    // Блокируем кнопку атаки до начала нового боя
+    document.getElementById('attack-btn').disabled = true;
+    
+    // Очищаем состояние боя
+    battleState = {
+        playerAttack: [],
+        playerDefense: [],
+        enemyAttack: [],
+        enemyDefense: [],
+        log: battleState.log
+    };    
+    
+    saveGame();
 }

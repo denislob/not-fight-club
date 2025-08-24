@@ -326,3 +326,44 @@ input[placeholder="Enter a new name"]::-webkit-input-placeholder {
     font-weight: bold;
     text-transform: uppercase;
 }
+
+.avatar-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+}
+
+.avatar-option-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.avatar-option.selected .avatar-option-image {
+    border-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+.enemy-option-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FF5252;
+    margin-bottom: 10px;
+}
+
+.enemy-option {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.enemy-option:hover {
+    transform: scale(1.05);
+}

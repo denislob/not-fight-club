@@ -33,22 +33,22 @@ const bodyZones = ['head', 'hands', 'legs', 'stomach', 'chest'];
 
 const enemies = {
     goblin: {
-        name: 'Goblin',
-        avatar: 'assets/images/goblin.png',
+        name: 'Goblin',       
+        avatar: '👹',
         maxHealth: 100,
         attackZones: 1,
         defenseZones: 2
     },
     spider: {
-        name: 'Spider Monster',
-        avatar: 'assets/images/spider.png',
+        name: 'Spider Monster',        
+        avatar: '🕷️',
         maxHealth: 80,
         attackZones: 2,
         defenseZones: 1
     },
     troll: {
-        name: 'Troll',
-        avatar: 'assets/images/troll.png',
+        name: 'Troll',       
+        avatar: '👺',
         maxHealth: 90,
         attackZones: 1,
         defenseZones: 3
@@ -57,9 +57,9 @@ const enemies = {
 
 
 const avatars = {
-    '1': 'assets/images/knight.png',
-    '2': 'assets/images/robot.png',
-    '3': 'assets/images/ridingHabit.png'
+    '1': '🤠',
+    '2': '🤖',
+    '3': '🤡'
 };
 
 
@@ -172,14 +172,7 @@ function setupEventListeners() {
         });
     });
 
-    document.getElementById('enemy-select-screen').addEventListener('show', function() {
-        document.querySelectorAll('.enemy-option').forEach(option => {
-            const enemyType = option.getAttribute('data-enemy');
-            option.innerHTML = `<img src="${enemies[enemyType].avatar}" alt="${enemies[enemyType].name}" class="enemy-option-image">
-                               <div>${enemies[enemyType].name}</div>`;
-        });
-    });
-
+    
     document.querySelectorAll('.body-zone').forEach(zone => {
         zone.addEventListener('click', function() {
             selectBodyZone(this);
@@ -223,8 +216,8 @@ function updatePlayer() {
     document.getElementById('draws-count').textContent = player.draws; 
     
     
-    document.getElementById('current-avatar').innerHTML = `<img src="${avatars[player.avatar]}" alt="Avatar" class="avatar-image">`;
-    document.getElementById('player-avatar-battle').innerHTML = `<img src="${avatars[player.avatar]}" alt="Avatar" class="avatar-image">`;
+    document.getElementById('current-avatar').innerHTML = `${avatars[player.avatar]}`;
+    document.getElementById('player-avatar-battle').innerHTML = `${avatars[player.avatar]}`;
 
     
     document.getElementById('player-health').textContent = player.health;
@@ -409,7 +402,7 @@ function updateCharacterScene() {
    
     document.querySelectorAll('.avatar-option').forEach(option => {
         const avatarId = option.getAttribute('data-avatar');
-        option.innerHTML = `<img src="${avatars[avatarId]}" alt="Avatar ${avatarId}" class="avatar-option-image">`;
+        option.innerHTML = `${avatars[avatarId]}`;
         
         if (option.getAttribute('data-avatar') === player.avatar) {
             option.classList.add('selected');
@@ -450,7 +443,7 @@ function startFight(enemyType) {
     
     document.getElementById('enemy-name').textContent = enemy.name;
     document.getElementById('enemy-name-battle').textContent = enemy.name;
-    document.getElementById('enemy-avatar-battle').innerHTML = `<img src="${enemy.avatar}" alt="${enemy.name}" class="avatar-image">`;
+    document.getElementById('enemy-avatar-battle').innerHTML = `${enemy.avatar}`;
     
     
     document.getElementById('player-health').textContent = player.health;

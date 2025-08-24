@@ -186,7 +186,12 @@ function setupEventListeners() {
         });
     }); 
 
-    document.getElementById('attack-btn').addEventListener('click', executeAttack);    
+    document.getElementById('attack-btn').addEventListener('click', executeAttack);
+    
+    document.getElementById('modal-continue-btn').addEventListener('click', function() {
+        document.getElementById('result-modal').style.display = 'none';
+        showScene('home-screen');
+    });
     
 }
 
@@ -204,7 +209,9 @@ function registerPlayer() {
         saveGame();
         updatePlayer();
         showScene('home-screen');
-    } 
+    } else {
+        showAlert('Please enter your name!');
+    }
 }
 
 function updatePlayer() {
@@ -230,8 +237,10 @@ function saveSettings() {
         player.name = newName;
         saveGame();
         updatePlayer();
-                
-    } 
+        showAlert('Name changed successfully!');                
+    } else {
+        showAlert('Please enter a new name!');
+    }
 }
 
 function executeAttack() {
@@ -490,7 +499,9 @@ function selectBodyZone(element) {
             
             battleState.playerDefense.push(part);
             element.classList.add('selected');
-        } 
+        } else {
+            showAlert('You can select up to two protection zones!');
+        }
     }
     
    
@@ -499,8 +510,8 @@ function selectBodyZone(element) {
 
 
 function resetBodyZones() {
-    document.querySelectorAll('.body-zone').forEach(part => {
-        part.classList.remove('selected');
+    document.querySelectorAll('.body-zone').forEach(zone => {
+        zone.classList.remove('selected');
     });
     battleState.playerAttack = [];
     battleState.playerDefense = [];
@@ -544,7 +555,48 @@ function endFight() {
         enemyAttack: [],
         enemyDefense: [],
         log: battleState.log
-    };    
+    }; 
+    
+    showResultModal(resultMessage);
     
     saveGame();
+}
+
+function showResultModal(message) {
+    const modal = document.getElementById('result-modal');
+    const modalMessage = document.getElementById('modal-message');
+    
+    modalMessage.textContent = message;
+    modal.style.display = 'flex';
+}
+
+function showAlert(message, title = 'Notification') {    
+    let customAlert = document.getElementById('custom-alert');
+    if (!customAlert) {
+        customAlert = document.createElement('div');
+        customAlert.id = 'custom-alert';
+        customAlert.className = 'custom-alert-overlay';
+        customAlert.innerHTML = `
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="custom-alert-title">${title}</div>                    
+                </div>
+                <div class="modal-body">${message}</div>
+                <div class="modal-footer">
+                    <button class="modal-btn" onclick="closeModal('custom-alert')">OK</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(customAlert);
+    } else {        
+        customAlert.querySelector('.custom-alert-title').textContent = title;
+        customAlert.querySelector('.modal-body').textContent = message;
+    }    
+    
+    customAlert.classList.add('active');
+}
+
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
 }
